@@ -1,0 +1,37 @@
+import winston from "winston";
+
+const { combine, timestamp, printf, colorize, errors } = winston.format;
+
+const devFormat = combine(
+  colorize(),
+  timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+  errors({ stack: true }),
+  printf(({ level, message, timestamp, stack }) => {
+    return stack
+      ? `[${timestamp}] ${level}: ${message}\n${stack}`
+      : `[${timestamp}] ${level}: ${message}`;
+  })
+);
+
+const prodFormat = combine(
+  timestamp(),
+  errors({ stack: true }),
+  winston.format.json()
+);
+
+export const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL || "http", // http < info, so http logs appear in dev
+  format: process.env.NODE_ENV === "production" ? prodFormat : devFormat,
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({
+      filename: "logs/error.log",
+      level: "error",
+      format: combine(timestamp(), errors({ stack: true }), winston.format.json()),
+    }),
+    new winston.transports.File({
+      filename: "logs/combined.log",
+      format: combine(timestamp(), winston.format.json()),
+    }),
+  ],
+});

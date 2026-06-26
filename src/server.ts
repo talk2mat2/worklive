@@ -1,23 +1,25 @@
 import app from "./app";
 import { sequelize } from "./config/database";
+import { logger } from "./utils/logger";
 import dotenv from "dotenv";
-dotenv.config(); //
+dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
 (async () => {
   try {
     await sequelize.authenticate();
-    console.log("DB connected");
+    logger.info("Database connected successfully");
+
     if (process.env.NODE_ENV !== "production") {
-      await sequelize.sync(); // only in dev/test
+      await sequelize.sync();
     }
-    await sequelize.sync();
 
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+      logger.info(`Server running on port ${PORT} in ${process.env.NODE_ENV || "development"} mode`);
     });
   } catch (err) {
-    console.error("Unable to connect to DB:", err);
+    logger.error("Unable to connect to database", { error: err });
+    process.exit(1);
   }
 })();

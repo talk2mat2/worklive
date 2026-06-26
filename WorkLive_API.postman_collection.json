@@ -1,0 +1,657 @@
+{
+  "info": {
+    "name": "WorkLive API",
+    "description": "Full API collection for the WorkLive marketplace platform",
+    "_postman_id": "worklive-api-collection-v1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000", "type": "string" },
+    { "key": "token", "value": "", "type": "string" },
+    { "key": "refreshToken", "value": "", "type": "string" },
+    { "key": "userId", "value": "", "type": "string" },
+    { "key": "requestId", "value": "", "type": "string" },
+    { "key": "offerId", "value": "", "type": "string" },
+    { "key": "conversationId", "value": "", "type": "string" },
+    { "key": "notificationId", "value": "", "type": "string" },
+    { "key": "reviewId", "value": "", "type": "string" },
+    { "key": "vendorId", "value": "", "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Sign Up (User)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/users", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Chioma Okonkwo\",\n  \"email\": \"chioma@example.com\",\n  \"phone\": \"+2348012345678\",\n  \"password\": \"Password123!\",\n  \"location\": \"15, Adeola Odeku Street, Victoria Island, Lagos\",\n  \"state\": \"Lagos\",\n  \"houseNumber\": \"15\",\n  \"street\": \"Adeola Odeku Street\",\n  \"type\": \"user\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.token) {",
+                  "  pm.collectionVariables.set('token', res.data.token);",
+                  "  pm.collectionVariables.set('refreshToken', res.data.refreshToken);",
+                  "  pm.collectionVariables.set('userId', res.data.user.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sign Up (Vendor)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/users", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ibrahim Abdullahi\",\n  \"email\": \"ibrahim@example.com\",\n  \"phone\": \"+2348023456789\",\n  \"password\": \"Password123!\",\n  \"location\": \"42, Garki Area 11, Abuja\",\n  \"state\": \"Abuja\",\n  \"houseNumber\": \"42\",\n  \"street\": \"Garki Area 11\",\n  \"type\": \"vendor\",\n  \"businessName\": \"Ibrahim Tech Solutions\",\n  \"category\": \"tech\",\n  \"cacRegNo\": \"RC1234567\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.token) {",
+                  "  pm.collectionVariables.set('token', res.data.token);",
+                  "  pm.collectionVariables.set('refreshToken', res.data.refreshToken);",
+                  "  pm.collectionVariables.set('userId', res.data.user.id);",
+                  "  pm.collectionVariables.set('vendorId', res.data.user.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/users/login", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"chioma@example.com\",\n  \"password\": \"Password123!\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.token) {",
+                  "  pm.collectionVariables.set('token', res.data.token);",
+                  "  pm.collectionVariables.set('refreshToken', res.data.refreshToken);",
+                  "  pm.collectionVariables.set('userId', res.data.user.id);",
+                  "  pm.test('Login successful', () => pm.response.to.have.status(200));",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/users/refresh-token", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users", "refresh-token"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.accessToken) {",
+                  "  pm.collectionVariables.set('token', res.data.accessToken);",
+                  "  pm.collectionVariables.set('refreshToken', res.data.refreshToken);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token (Legacy Path)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/Authentication/refresh-token", "host": ["{{baseUrl}}"], "path": ["api", "Authentication", "refresh-token"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users?type=vendor",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users"],
+              "query": [
+                { "key": "type", "value": "vendor", "description": "Filter by type: user | vendor" },
+                { "key": "search", "value": "", "description": "Search by name", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get My Profile",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/users/me", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users", "me"] }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users", "{{userId}}"] }
+          }
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/users/me", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users", "me"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Chioma Okonkwo Updated\",\n  \"phone\": \"+2348011111111\",\n  \"location\": \"Victoria Island, Lagos\",\n  \"state\": \"Lagos\",\n  \"showFullAddress\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/users/me/password", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users", "me", "password"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"Password123!\",\n  \"newPassword\": \"NewPassword456!\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Migrate User to Vendor",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/users/me/migrate", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users", "me", "migrate"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"businessName\": \"Chioma Tech Services\",\n  \"category\": \"tech\",\n  \"cacRegNo\": \"BN9876543\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Service Requests",
+      "item": [
+        {
+          "name": "Get All Requests",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/requests",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "requests"],
+              "query": [
+                { "key": "category", "value": "", "description": "Filter by category (tech, events, etc)", "disabled": true },
+                { "key": "userId", "value": "", "description": "Filter by request owner ID", "disabled": true },
+                { "key": "status", "value": "active", "description": "Filter by status: active | expired | completed | cancelled", "disabled": true },
+                { "key": "search", "value": "", "description": "Search by title or description", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Request by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/requests/{{requestId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "requests", "{{requestId}}"] }
+          }
+        },
+        {
+          "name": "Create Request",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/requests", "host": ["{{baseUrl}}"], "path": ["api", "v1", "requests"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Laptop Screen Replacement\",\n  \"description\": \"My MacBook Pro 14 screen cracked and needs replacement. Looking for a professional technician.\",\n  \"category\": \"tech\",\n  \"budget\": {\n    \"min\": 30000,\n    \"max\": 80000,\n    \"type\": \"range\"\n  },\n  \"location\": \"Victoria Island, Lagos\",\n  \"serviceType\": \"in-person\",\n  \"expiresAt\": \"2026-07-01T00:00:00.000Z\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.id) {",
+                  "  pm.collectionVariables.set('requestId', res.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Request",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/requests/{{requestId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "requests", "{{requestId}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Laptop Screen Replacement - Urgent\",\n  \"status\": \"active\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Request",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/v1/requests/{{requestId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "requests", "{{requestId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Offers",
+      "item": [
+        {
+          "name": "Get Offers (for a Request)",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/offers?requestId={{requestId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "offers"],
+              "query": [
+                { "key": "requestId", "value": "{{requestId}}", "description": "Get offers for a specific request" },
+                { "key": "vendorId", "value": "", "description": "Get offers made by a vendor", "disabled": true },
+                { "key": "requestOwnerId", "value": "", "description": "Get all offers received on a user's requests", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Offers (by Vendor)",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/offers?vendorId={{vendorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "offers"],
+              "query": [
+                { "key": "vendorId", "value": "{{vendorId}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Offers Received (by Request Owner)",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/offers?requestOwnerId={{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "offers"],
+              "query": [
+                { "key": "requestOwnerId", "value": "{{userId}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Offer",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/offers", "host": ["{{baseUrl}}"], "path": ["api", "v1", "offers"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestId\": \"{{requestId}}\",\n  \"amount\": 45000,\n  \"description\": \"I can fix your MacBook screen with original Apple parts. 1-year warranty included.\",\n  \"timeline\": \"2 days\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.id) {",
+                  "  pm.collectionVariables.set('offerId', res.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Accept Offer",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/offers/{{offerId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "offers", "{{offerId}}"] },
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"accepted\"\n}" }
+          }
+        },
+        {
+          "name": "Reject Offer",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/offers/{{offerId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "offers", "{{offerId}}"] },
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"rejected\"\n}" }
+          }
+        },
+        {
+          "name": "Withdraw Offer",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/offers/{{offerId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "offers", "{{offerId}}"] },
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"withdrawn\"\n}" }
+          }
+        },
+        {
+          "name": "Mark Offer In Review",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/offers/{{offerId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "offers", "{{offerId}}"] },
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"in_review\"\n}" }
+          }
+        },
+        {
+          "name": "Delete Offer",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/v1/offers/{{offerId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "offers", "{{offerId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Conversations & Messages",
+      "item": [
+        {
+          "name": "Get My Conversations",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/conversations", "host": ["{{baseUrl}}"], "path": ["api", "v1", "conversations"] }
+          }
+        },
+        {
+          "name": "Get or Create Conversation",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/conversations", "host": ["{{baseUrl}}"], "path": ["api", "v1", "conversations"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"otherUserId\": \"{{vendorId}}\",\n  \"requestId\": \"{{requestId}}\",\n  \"offerId\": \"{{offerId}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.id) {",
+                  "  pm.collectionVariables.set('conversationId', res.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Messages",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/conversations/{{conversationId}}/messages", "host": ["{{baseUrl}}"], "path": ["api", "v1", "conversations", "{{conversationId}}", "messages"] }
+          }
+        },
+        {
+          "name": "Send Message",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/conversations/{{conversationId}}/messages", "host": ["{{baseUrl}}"], "path": ["api", "v1", "conversations", "{{conversationId}}", "messages"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Hello! I saw your offer and I'd like to discuss more details.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Mark Conversation as Read",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/conversations/{{conversationId}}/read", "host": ["{{baseUrl}}"], "path": ["api", "v1", "conversations", "{{conversationId}}", "read"] },
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Get My Notifications",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/notifications", "host": ["{{baseUrl}}"], "path": ["api", "v1", "notifications"] }
+          }
+        },
+        {
+          "name": "Mark All Notifications as Read",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/notifications/read-all", "host": ["{{baseUrl}}"], "path": ["api", "v1", "notifications", "read-all"] },
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        },
+        {
+          "name": "Mark Notification as Read",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/notifications/{{notificationId}}/read", "host": ["{{baseUrl}}"], "path": ["api", "v1", "notifications", "{{notificationId}}", "read"] },
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        },
+        {
+          "name": "Delete Notification",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/v1/notifications/{{notificationId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "notifications", "{{notificationId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Get Reviews for a Vendor",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews?revieweeId={{vendorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reviews"],
+              "query": [
+                { "key": "revieweeId", "value": "{{vendorId}}", "description": "Get reviews received by this user" },
+                { "key": "reviewerId", "value": "", "description": "Get reviews written by this user", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Check if User Reviewed a Vendor",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews?reviewerId={{userId}}&revieweeId={{vendorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reviews"],
+              "query": [
+                { "key": "reviewerId", "value": "{{userId}}" },
+                { "key": "revieweeId", "value": "{{vendorId}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Submit Review",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/reviews", "host": ["{{baseUrl}}"], "path": ["api", "v1", "reviews"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"revieweeId\": \"{{vendorId}}\",\n  \"rating\": 5,\n  \"comment\": \"Excellent service! Fixed my laptop screen in 24 hours. Highly recommended.\",\n  \"type\": \"user_to_vendor\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.id) {",
+                  "  pm.collectionVariables.set('reviewId', res.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Review",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/reviews/{{reviewId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "reviews", "{{reviewId}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 4,\n  \"comment\": \"Good service overall. Minor delay but quality was great.\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Report a User",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/reports", "host": ["{{baseUrl}}"], "path": ["api", "v1", "reports"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reportedId\": \"{{vendorId}}\",\n  \"reportedType\": \"user\",\n  \"reason\": \"Fraudulent activity\",\n  \"details\": \"This vendor collected payment but never showed up to do the work.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Report a Request",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/reports", "host": ["{{baseUrl}}"], "path": ["api", "v1", "reports"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reportedId\": \"{{requestId}}\",\n  \"reportedType\": \"request\",\n  \"reason\": \"Inappropriate content\",\n  \"details\": \"This service request contains offensive language.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Report an Offer",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/reports", "host": ["{{baseUrl}}"], "path": ["api", "v1", "reports"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reportedId\": \"{{offerId}}\",\n  \"reportedType\": \"offer\",\n  \"reason\": \"Misleading offer\",\n  \"details\": \"The offer price is intentionally misleading.\"\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
